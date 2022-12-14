@@ -26,8 +26,11 @@ namespace YellowCarrot
         public MainWindow()
         {
             InitializeComponent();
-            
-            
+
+            btnSelect.IsEnabled = false;
+            btnDelete.IsEnabled = false;
+
+
             using (CarrotContext context = new CarrotContext())
             {
                 List <Recipe> recipes = context.recipes.ToList();
@@ -45,6 +48,9 @@ namespace YellowCarrot
             }
         }
 
+
+        //////////////////////// EVENTS /////////////////////////////
+        /////////////////////////////////////////////////////////////
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             Recipe recipe = new Recipe();
@@ -67,34 +73,26 @@ namespace YellowCarrot
 
             using (CarrotContext context = new CarrotContext())
             {
-                if(lvlRecipeList.SelectedItems.Count == 0)
-                {
-                    btnSelect.IsEnabled = false;
-                    MessageBox.Show("please choose from list before pressing details");
-                    return; 
 
-                }
-                ListViewItem? item = lvlRecipeList.SelectedItem as ListViewItem;
-                Recipe reciperecipe = item.Tag as Recipe;
-                
-                if(lvlRecipeList!= null)
-                {
+                    ListViewItem? item = lvlRecipeList.SelectedItem as ListViewItem;
+                    Recipe reciperecipe = item.Tag as Recipe;
+ 
+
+                    btnSelect.IsEnabled = true;
                     DetailsWindow detailsWindow = new(reciperecipe.RecipeId);
                     detailsWindow.Show();
-                }
-
                  
 
-
+                
             }
-            Close();
+                    Close();
         }
 
         private void btnInfo_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("                                            Welcome to info\r\r " +
                 "When added a recipe you can now see the recipe in the list!\r " +
-                "To add ingridients or tags choose from the list and then press the details button");
+                "To add ingridients or tags choose from the list and then press the details button\r\r\r Details and Delete button is disabled until user selects a Recipe from the list!");
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -115,6 +113,23 @@ namespace YellowCarrot
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
             Close();
+        }
+
+
+        private void lvlRecipeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            if(lvlRecipeList.SelectedIndex > -1)
+            {
+                btnSelect.IsEnabled = true;
+                btnDelete.IsEnabled = true;
+                
+            }
+            else if (lvlRecipeList.SelectedIndex == -1)
+            {
+                btnSelect.IsEnabled = false;
+                btnDelete.IsEnabled = false;
+            }
         }
     }
 }

@@ -41,7 +41,7 @@
             Background="Beige"
             Grid.Row="1"
             Grid.ColumnSpan="2"
-            Grid.RowSpan="5"/>
+            Grid.RowSpan="5" SelectionChanged="lvlIngridiens_SelectionChanged"/>
         <Button
             x:Name="btnExitToMainWindow"
             Grid.Row="6"
@@ -106,5 +106,13 @@
             Content="Add Tag"
             FontSize="13"
             Height="35" Click="btnAddTag_Click"/>
+        <Button
+            x:Name="btnRemoveIngridient"
+            Grid.Row="5"
+            VerticalAlignment="Bottom"
+            Grid.Column="2"
+            Content="Remove Ingrident"
+            FontSize="13"
+            Height="35" Click="btnRemoveIngridient_Click" />
     </Grid>
 </Window>

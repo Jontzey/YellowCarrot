@@ -32,7 +32,7 @@
             VerticalAlignment="Bottom"
             FontSize="19"
             Grid.Column="1"
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="2" FontWeight="Bold"
             />
         <TextBox
             x:Name="txbRecipeName"
@@ -40,22 +40,25 @@
             Width="150"
             Height="40"
             HorizontalAlignment="Left"
+            VerticalAlignment="Top"
             Grid.Column="1"
             Grid.ColumnSpan="2"
             Grid.Row="1"
-            TextWrapping="Wrap"/>
+            TextWrapping="Wrap"
+            />
 
         <ListView
             x:Name="lvlRecipeList"
             Background="Beige"
             Grid.Column="3"
             Grid.ColumnSpan="3"
-            Grid.RowSpan="5"/>
+            Grid.RowSpan="5" SelectionChanged="lvlRecipeList_SelectionChanged"
+            />
 
         <Button
             x:Name="btnSave"
-            Content="Save"
-            Grid.Row="3"
+            Content="Save Recipe"
+            Grid.Row="2"
             Grid.Column="1"
             Grid.ColumnSpan="2"
             Height="40"
@@ -79,7 +82,9 @@
             Grid.Row="5"
             Grid.Column="6"
             Height="40" Click="btnDelete_Click" />
-
+        <Grid.Background>
+            <ImageBrush ImageSource="Backgrounds\Kitchen.jpg"/>
+        </Grid.Background>
 
     </Grid>
 </Window>
