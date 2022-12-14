@@ -17,9 +17,9 @@ namespace YellowCarrot.Repository
         {
             this._context = context;
         }
-        private void GetIngridient()
+        public void GetIngridient(Ingridient ingridient)
         {
-            
+            _context.ingridients.Add(ingridient);
         }
         public void AddIngrident(Ingridient addingridient)
         {

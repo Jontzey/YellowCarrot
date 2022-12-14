@@ -75,7 +75,19 @@ namespace YellowCarrot
         // ADD BUTTON TO ADD A TAG TO RECIPES
         private void btnAddTag_Click(object sender, RoutedEventArgs e)
         {
+            using (CarrotContext context= new CarrotContext())
+            {
+                Tags tag = new();
 
+                tag.Recipe = context.recipes.Where(x => x.RecipeId == theID).FirstOrDefault();
+                tag.TagName = txbTag.Text;
+
+                context.tags.Add(tag);
+                context.SaveChanges();
+
+
+
+            }
         }
 
         // save button for each ingridient
@@ -102,7 +114,9 @@ namespace YellowCarrot
                 // By saying the ingrident recipe is has the same id as the one in the database
                 ingridient.Recipe = context.recipes.Where(x => x.RecipeId == recipes.RecipeId).FirstOrDefault();
 
-                
+                // TEST KOD FOR REPO
+                 IngridentRepository ingridentRepository = new(context);
+                ingridentRepository.AddIngrident(ingridient);
                 
                 
                 // Add the ingridient in database
@@ -221,5 +235,22 @@ namespace YellowCarrot
             showIngridient(theID);
         }
 
+        private void btnChangeIngridient_Click(object sender, RoutedEventArgs e)
+        {
+
+            ListViewItem SelectedItem = lvlIngridiens.SelectedItem as ListViewItem;
+            Ingridient ingridient = SelectedItem.Tag as Ingridient;
+            
+            ChangeIngridientWindow changeIngridientWindow = new(ingridient);
+            changeIngridientWindow.Show();
+           
+        }
+
+        private void btnSeeTags_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeTagsWindow changeTagsWindow = new(theID);
+            changeTagsWindow.Show();
+
+        }
     }
 }

@@ -107,6 +107,13 @@
             FontSize="13"
             Height="35" Click="btnAddTag_Click"/>
         <Button
+            x:Name="btnSeeTags"
+            Grid.Row="3"
+            Grid.Column="3"
+            Content="See Tags"
+            FontSize="13"
+            Height="35" Click="btnSeeTags_Click"/>
+        <Button
             x:Name="btnRemoveIngridient"
             Grid.Row="5"
             VerticalAlignment="Bottom"
@@ -114,5 +121,13 @@
             Content="Remove Ingrident"
             FontSize="13"
             Height="35" Click="btnRemoveIngridient_Click" />
+        <Button
+            x:Name="btnChangeIngridient"
+            Grid.Row="4"
+            VerticalAlignment="Bottom"
+            Grid.Column="2"
+            Content="change Ingrident"
+            FontSize="13"
+            Height="35" Click="btnChangeIngridient_Click" />
     </Grid>
 </Window>
