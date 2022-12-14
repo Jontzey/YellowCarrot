@@ -11,23 +11,27 @@ namespace YellowCarrot.Repository
     
     public class IngridentRepository
     {
-        private readonly CarrotContext Context;
+        private readonly CarrotContext _context;
 
+        public IngridentRepository(CarrotContext context)
+        {
+            this._context = context;
+        }
         private void GetIngridient()
         {
             
         }
-        private void AddIngrident(Ingridient addingridient)
+        public void AddIngrident(Ingridient addingridient)
         {
-            Context.ingridients.Add(addingridient);
+            _context.ingridients.Add(addingridient);
         }
-        private void RemoveIngridient(Ingridient DeleteIngridient)
+        public void RemoveIngridient(Ingridient DeleteIngridient)
         {
-            Context.Remove(DeleteIngridient);
+            _context.Remove(DeleteIngridient);
         }
         private void updateIngridient(Ingridient UpdateIngridient)
         {
-            Context.ingridients.Update(UpdateIngridient);
+            _context.ingridients.Update(UpdateIngridient);
         }
     }
 }

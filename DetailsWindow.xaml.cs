@@ -41,6 +41,7 @@ namespace YellowCarrot
             InitializeComponent();
 
             showIngridient(recipeId);
+            // sets the field variable to what we sent from mainwindow to this window(details window)
             this.theID = recipeId;
 
             btnRemoveIngridient.IsEnabled = false;
@@ -111,15 +112,10 @@ namespace YellowCarrot
 
             }
 
-                
                 // simpel message
                 MessageBox.Show("Ingridient now was added!");
-
-                // open upp a new window with current recipe, just to update UI
-                DetailsWindow detailsWindow = new(recipes.RecipeId);
-                detailsWindow.Show();
-                // closes the current window after the new window pops up
-                Close();
+                // refreshes all items in the window
+                UpdateUI();
 
                 
         }
@@ -128,12 +124,16 @@ namespace YellowCarrot
         // What happens when a item in the list is selected
         private void lvlIngridiens_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(lvlIngridiens.SelectedIndex > 0 )
+            // if something in listview is selected more than nothing do this
+            if(lvlIngridiens.SelectedIndex > -1 )
             {
+                // if something is selected make the button available
                 btnRemoveIngridient.IsEnabled = true;
             }
+            // if nothing is selected do this
             else if (lvlIngridiens.SelectedIndex == -1)
             {
+                // if something is not selected the button shall not be available
                 btnRemoveIngridient.IsEnabled = false;
                 
             }
@@ -142,13 +142,17 @@ namespace YellowCarrot
         // REMOVE BUTTON
         private void btnRemoveIngridient_Click(object sender, RoutedEventArgs e)
         {
-
+            //Set the selected item in listview
             ListViewItem selectedItem = lvlIngridiens.SelectedItem as ListViewItem;
+            // say what the item is and give it a tag
             Ingridient ingridient = selectedItem.Tag as Ingridient;
 
-            IngridentRepository ingridentRepository = new();
-
+            // send it to repository class for deletion
             DeleteIngridient(ingridient);
+            // refresh UI
+            UpdateUI();
+
+
         }
 
         /////////////////////////////////METHODS////////////////////////////////////////////////////////
@@ -156,22 +160,24 @@ namespace YellowCarrot
 
 
         // shows all ingridients in the Recipe
+
         private void showIngridient(int recipeId)
         {
             using(CarrotContext context = new CarrotContext())
             {
                 
                 
-                
+               // save all ingridients in a list where the recipeid is the same as the recipe (id) we fetched from mainwindow
                List<Ingridient> GetAll = context.ingridients.Where(x => x.recipeId == recipeId).ToList();
 
-
+                // incase if the list is empty, show this message
                 if (GetAll == null)
                 {
                     MessageBox.Show("this is empty");
                 }
                 else
                 {
+                    // foreach thing in this list, give it a tag and add to listview
                     foreach(Ingridient d in GetAll)
                     {
                         ListViewItem item = new();
@@ -194,16 +200,25 @@ namespace YellowCarrot
             using (CarrotContext context = new CarrotContext())
             {
 
-                
+                IngridentRepository ingridentRepository = new(context);
+                ingridentRepository.RemoveIngridient(ingridient);
 
-                context.ingridients.Remove(ingridient);
+                
                 context.SaveChanges();
 
             }
 
-            DetailsWindow detailsWindow = new(theID);
-            detailsWindow.Show();
-            Close();
+        }
+
+        // Updates the UI refreshes all the content
+        private void UpdateUI()
+        {
+            // clear all boxes and items
+            lvlIngridiens.Items.Clear();
+            txbIngridientName.Clear();
+            txbIngridientQuantity.Clear();
+            // method to show stuff in listview
+            showIngridient(theID);
         }
 
     }

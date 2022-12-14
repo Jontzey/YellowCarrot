@@ -44,6 +44,99 @@ namespace YellowCarrot.Migrations
                     b.HasIndex("recipeId");
 
                     b.ToTable("ingridients");
+
+                    b.HasData(
+                        new
+                        {
+                            IngridientId = 1,
+                            Name = "Vetemjöl",
+                            Quantity = "2 1/2 dl",
+                            recipeId = 1
+                        },
+                        new
+                        {
+                            IngridientId = 2,
+                            Name = "Salt",
+                            Quantity = "1/2 tsk",
+                            recipeId = 1
+                        },
+                        new
+                        {
+                            IngridientId = 3,
+                            Name = "Mjölk",
+                            Quantity = "6 dl",
+                            recipeId = 1
+                        },
+                        new
+                        {
+                            IngridientId = 4,
+                            Name = "Ägg",
+                            Quantity = "3 st",
+                            recipeId = 1
+                        },
+                        new
+                        {
+                            IngridientId = 5,
+                            Name = "Smör",
+                            Quantity = "(till Stekning)",
+                            recipeId = 1
+                        },
+                        new
+                        {
+                            IngridientId = 6,
+                            Name = "Smör",
+                            Quantity = "(till Stekning)",
+                            recipeId = 2
+                        },
+                        new
+                        {
+                            IngridientId = 7,
+                            Name = "Smör",
+                            Quantity = "100g",
+                            recipeId = 2
+                        },
+                        new
+                        {
+                            IngridientId = 8,
+                            Name = "Ägg",
+                            Quantity = "2 st",
+                            recipeId = 2
+                        },
+                        new
+                        {
+                            IngridientId = 9,
+                            Name = "Strösocker",
+                            Quantity = "2 1/2 dl",
+                            recipeId = 2
+                        },
+                        new
+                        {
+                            IngridientId = 10,
+                            Name = "Kakao",
+                            Quantity = "3 msk",
+                            recipeId = 2
+                        },
+                        new
+                        {
+                            IngridientId = 11,
+                            Name = "VaniljSocker",
+                            Quantity = "2 tsk",
+                            recipeId = 2
+                        },
+                        new
+                        {
+                            IngridientId = 12,
+                            Name = "VeteMjöl",
+                            Quantity = "1 1/2 dl",
+                            recipeId = 2
+                        },
+                        new
+                        {
+                            IngridientId = 13,
+                            Name = "Salt",
+                            Quantity = "1 krm",
+                            recipeId = 2
+                        });
                 });
 
             modelBuilder.Entity("YellowCarrot.Model.Recipe", b =>
@@ -61,6 +154,18 @@ namespace YellowCarrot.Migrations
                     b.HasKey("RecipeId");
 
                     b.ToTable("recipes");
+
+                    b.HasData(
+                        new
+                        {
+                            RecipeId = 1,
+                            RecipeName = "Pannkaka"
+                        },
+                        new
+                        {
+                            RecipeId = 2,
+                            RecipeName = "Kladkaka"
+                        });
                 });
 
             modelBuilder.Entity("YellowCarrot.Model.Tags", b =>
