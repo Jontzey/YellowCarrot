@@ -29,6 +29,7 @@ namespace YellowCarrot
 
             btnSelect.IsEnabled = false;
             btnDelete.IsEnabled = false;
+            btnChange.IsEnabled = false;
 
 
             using (CarrotContext context = new CarrotContext())
@@ -56,18 +57,33 @@ namespace YellowCarrot
             Recipe recipe = new Recipe();
             using (CarrotContext context= new CarrotContext())
             {
-                recipe.RecipeName = txbRecipeName.Text;
 
-                context.recipes.Add(recipe);
-                context.SaveChanges();
+                if(txbRecipeName.Text.Length == 0)
+                {
+                    MessageBox.Show("You must have letters in a name for it to exist :) ");
+                }
+                else if (txbRecipeName.Text.Length < 3)
+                {
+                    MessageBox.Show("The rule here is at least the name must have three letters! ;)");
+                }
+                else
+                {
+                    recipe.RecipeName = txbRecipeName.Text;
+
+                    context.recipes.Add(recipe);
+                    context.SaveChanges();
+
+                    MessageBox.Show($"{recipe.RecipeName} was now added to the list");
+                    txbRecipeName.Clear();
+                    
+                    UpdateUiList();
+                    //MainWindow mainWindow = new MainWindow();
+                    //mainWindow.Show();
+                    //Close();
+                }
             }
-            MessageBox.Show($"{recipe.RecipeName} was now added to the list");
-            txbRecipeName.Clear();
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            Close();
         }
-
+        /////////////////////// EVENTS IN WPF ////////////////////////////////////
         private void btnSelect_Click(object sender, RoutedEventArgs e)
         {
 
@@ -110,9 +126,7 @@ namespace YellowCarrot
                 context.SaveChanges();
 
             }
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            Close();
+                UpdateUiList();
         }
 
 
@@ -123,12 +137,51 @@ namespace YellowCarrot
             {
                 btnSelect.IsEnabled = true;
                 btnDelete.IsEnabled = true;
+                btnChange.IsEnabled= true;
                 
             }
             else if (lvlRecipeList.SelectedIndex == -1)
             {
                 btnSelect.IsEnabled = false;
                 btnDelete.IsEnabled = false;
+                btnChange.IsEnabled= false;
+            }
+        }
+
+        private void btnChange_Click(object sender, RoutedEventArgs e)
+        {
+            ListViewItem selectedItem = lvlRecipeList.SelectedItem as ListViewItem;
+
+            Recipe recipe = selectedItem.Tag as Recipe;
+
+            ChangeRecipeNameWindow changeRecipeNameWindow = new(recipe);
+            changeRecipeNameWindow.Show();
+            Close();
+
+
+        }
+
+
+        ////////////////////////// Methods //////////////////////////////
+
+        private void UpdateUiList()
+        {
+                    lvlRecipeList.Items.Clear();
+
+            using (CarrotContext context = new CarrotContext())
+            {
+                List<Recipe> recipes = context.recipes.ToList();
+
+                foreach (Recipe recipe in recipes)
+                {
+                    ListViewItem item = new ListViewItem();
+
+                    item.Tag = recipe;
+                    item.Content = recipe.RecipeName;
+                    lvlRecipeList.Items.Add(item);
+                    lvlRecipeList.SelectedItem = btnSelect;
+                }
+
             }
         }
     }

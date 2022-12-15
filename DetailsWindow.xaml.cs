@@ -44,9 +44,11 @@ namespace YellowCarrot
             // sets the field variable to what we sent from mainwindow to this window(details window)
             this.theID = recipeId;
 
+            // sets the button to be disabled from beginning
             btnRemoveIngridient.IsEnabled = false;
-            
-               
+            btnChangeIngridient.IsEnabled = false;
+
+
             using (CarrotContext context= new CarrotContext())
             {
                     // the field variable is the same as the one we sent from mainwindow
@@ -143,12 +145,14 @@ namespace YellowCarrot
             {
                 // if something is selected make the button available
                 btnRemoveIngridient.IsEnabled = true;
+                btnChangeIngridient.IsEnabled = true;
             }
             // if nothing is selected do this
             else if (lvlIngridiens.SelectedIndex == -1)
             {
                 // if something is not selected the button shall not be available
                 btnRemoveIngridient.IsEnabled = false;
+                btnChangeIngridient.IsEnabled = false;
                 
             }
         }
@@ -192,11 +196,11 @@ namespace YellowCarrot
                 else
                 {
                     // foreach thing in this list, give it a tag and add to listview
-                    foreach(Ingridient d in GetAll)
+                    foreach(Ingridient I in GetAll)
                     {
                         ListViewItem item = new();
-                        item.Tag = d;
-                        item.Content = $"{d.Name}  {d.Quantity}";
+                        item.Tag = I;
+                        item.Content = $"{I.Name}  {I.Quantity}";
                         lvlIngridiens.Items.Add(item);
 
                     }

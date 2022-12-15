@@ -57,7 +57,7 @@
 
         <Button
             x:Name="btnSave"
-            Content="Save Recipe"
+            Content="Add Recipe"
             Grid.Row="2"
             Grid.Column="1"
             Grid.ColumnSpan="2"
@@ -76,6 +76,13 @@
             Grid.Row="5"
             Grid.Column="4"
             Height="40" Click="btnSelect_Click"/>
+        <Button
+            x:Name="btnChange"
+            Content="Change Recipe Name"
+            Grid.Row="6"
+            FontSize="10"
+            Grid.Column="4"
+            Height="40" Click="btnChange_Click" />
         <Button
             x:Name="btnDelete"
             Content="Delete Recipe"
