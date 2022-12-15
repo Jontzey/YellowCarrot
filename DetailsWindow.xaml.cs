@@ -95,44 +95,34 @@ namespace YellowCarrot
         // save button for each ingridient
         private void btnSaveIngridient_Click(object sender, RoutedEventArgs e)
 
-
-    
         {
-            
-
-
             using (CarrotContext context = new CarrotContext())
             {
-                // create a ingridient 
-                Ingridient ingridient = new();
-
-                // filling the coloumns in database with data
-                ingridient.Name = txbIngridientName.Text;
-                ingridient.Quantity = txbIngridientQuantity.Text;
-                ingridient.recipeId = recipes.RecipeId;
-
-                // the recipe connected to the ingridient //
-                // the primary key in Recipe is connected to the foreign key in ingrident //
-                // By saying the ingrident recipe is has the same id as the one in the database
-                ingridient.Recipe = context.recipes.Where(x => x.RecipeId == recipes.RecipeId).FirstOrDefault();
-
-                // TEST KOD FOR REPO
-                 IngridentRepository ingridentRepository = new(context);
-                ingridentRepository.AddIngrident(ingridient);
                 
+                if(txbIngridientName.Text.Length == 0)
+                {
+                    MessageBox.Show("Ingridient must have a name! even if its one letter!");
+                }
+                else
+                {
+
+                    // TEST KOD FOR REPO
+                    new IngridentRepository(context).AddIngrident(new Ingridient()
+                    {
+                        Name = txbIngridientName.Text,
+                        Quantity = txbIngridientQuantity.Text,
+                        recipeId = recipes.RecipeId,
+                    });
                 
-                // Add the ingridient in database
-                context.ingridients.Add(ingridient);
-                // save the changes, without this nothing will update in the database
-                context.SaveChanges();
+                    // save the changes, without this nothing will update in the database
+                    context.SaveChanges();
+                    // simpel message
+                    MessageBox.Show("Ingridient now was added!");
+                    // refreshes all items in the window
+                    UpdateUI();
+                }
 
             }
-
-                // simpel message
-                MessageBox.Show("Ingridient now was added!");
-                // refreshes all items in the window
-                UpdateUI();
-
                 
         }
 
@@ -166,67 +156,50 @@ namespace YellowCarrot
             Ingridient ingridient = selectedItem.Tag as Ingridient;
 
             // send it to repository class for deletion
-            DeleteIngridient(ingridient);
+            //DeleteIngridient(ingridient);
+            using (CarrotContext context = new CarrotContext())
+            {
+                
+
+                new IngridentRepository(context).RemoveIngridient(ingridient);
+                context.SaveChanges();
+
+            }
             // refresh UI
             UpdateUI();
 
 
-        }
+        }       
+
+
+
+
 
         /////////////////////////////////METHODS////////////////////////////////////////////////////////
 
 
 
-        // shows all ingridients in the Recipe
+        // shows all ingridients in the current Recipe
 
         private void showIngridient(int recipeId)
         {
-            using(CarrotContext context = new CarrotContext())
-            {
-                
-                
-               // save all ingridients in a list where the recipeid is the same as the recipe (id) we fetched from mainwindow
-               List<Ingridient> GetAll = context.ingridients.Where(x => x.recipeId == recipeId).ToList();
 
-                // incase if the list is empty, show this message
-                if (GetAll == null)
-                {
-                    MessageBox.Show("this is empty");
-                }
-                else
-                {
-                    // foreach thing in this list, give it a tag and add to listview
-                    foreach(Ingridient I in GetAll)
-                    {
-                        ListViewItem item = new();
-                        item.Tag = I;
-                        item.Content = $"{I.Name}  {I.Quantity}";
-                        lvlIngridiens.Items.Add(item);
-
-                    }
- 
-
-                }
-
-            }
-
-        }
-
-        // method for deleting the ingridient in the list + database
-        private void DeleteIngridient(Ingridient ingridient)
-        {
             using (CarrotContext context = new CarrotContext())
             {
 
-                IngridentRepository ingridentRepository = new(context);
-                ingridentRepository.RemoveIngridient(ingridient);
+                var I = new IngridentRepository(context).GetIngridient(recipeId);
 
-                
-                context.SaveChanges();
+                foreach(Ingridient currentRecipe in I)
+                {
+                    ListViewItem item = new();
+                    item.Tag = currentRecipe;
+                    item.Content = $"{currentRecipe.Name}  {currentRecipe.Quantity}";
+                    lvlIngridiens.Items.Add(item);
 
+                }
             }
 
-        }
+        } //Check
 
         // Updates the UI refreshes all the content
         private void UpdateUI()
@@ -237,7 +210,7 @@ namespace YellowCarrot
             txbIngridientQuantity.Clear();
             // method to show stuff in listview
             showIngridient(theID);
-        }
+        } // Check
 
         private void btnChangeIngridient_Click(object sender, RoutedEventArgs e)
         {
@@ -247,6 +220,7 @@ namespace YellowCarrot
             
             ChangeIngridientWindow changeIngridientWindow = new(ingridient);
             changeIngridientWindow.Show();
+            Close();
            
         }
 

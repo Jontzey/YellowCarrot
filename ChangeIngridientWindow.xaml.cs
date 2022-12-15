@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using YellowCarrot.Data;
 using YellowCarrot.Model;
+using YellowCarrot.Repository;
 
 namespace YellowCarrot
 {
@@ -32,19 +33,20 @@ namespace YellowCarrot
 
         private void btnSaveChange_Click(object sender, RoutedEventArgs e)
         {
-
-            using(CarrotContext context = new CarrotContext())
+            using (CarrotContext context = new CarrotContext())
             {
 
-                Ingridient i = context.ingridients.Where(x => x.recipeId == Grönsaken.IngridientId).FirstOrDefault();
-
                 Grönsaken.Name = txbName.Text;
-                Grönsaken.Quantity = txbInfo.Text;
+                Grönsaken.Quantity = txbInfo.Text;  
 
-                context.ingridients.Update(Grönsaken);
+                new IngridentRepository(context).updateIngridient(Grönsaken);
                 context.SaveChanges();
+
+                DetailsWindow detailsWindow = new(Grönsaken.recipeId);
+                detailsWindow.Show();
+                Close();
             }
-            
+
 
         }
     }
