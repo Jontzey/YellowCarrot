@@ -129,5 +129,20 @@
             Content="change Ingrident"
             FontSize="13"
             Height="35" Click="btnChangeIngridient_Click" />
+        <Button
+            x:Name="btnInfo"
+            Grid.Row="6"
+            Grid.Column="6"
+            Content="Info"
+            FontSize="13"
+            Height="35" Click="btnInfo_Click" />
+        <Button
+            x:Name="btnUnlock"
+            Grid.Row="6"
+            Grid.Column="4"
+            Content="Unlock buttons"
+            FontSize="13"
+            Height="35" Click="btnUnlock_Click" />
+
     </Grid>
 </Window>

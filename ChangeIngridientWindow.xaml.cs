@@ -22,7 +22,9 @@ namespace YellowCarrot
     /// </summary>
     public partial class ChangeIngridientWindow : Window
     {
+        // Field variable
         private Ingridient Grönsaken;
+        
         public ChangeIngridientWindow(Ingridient ingridient)
         {
             InitializeComponent();
@@ -36,18 +38,38 @@ namespace YellowCarrot
             using (CarrotContext context = new CarrotContext())
             {
 
-                Grönsaken.Name = txbName.Text;
-                Grönsaken.Quantity = txbInfo.Text;  
+                if(txbName.Text.Length == 0)
+                {
+                    // message
+                    MessageBox.Show("To save you must filled the ingrident textbox with something");
+                }
+                else
+                {
 
-                new IngridentRepository(context).updateIngridient(Grönsaken);
-                context.SaveChanges();
+                    // contains the inputs for recipe
+                    Grönsaken.Name = txbName.Text;
+                    Grönsaken.Quantity = txbInfo.Text;  
 
-                DetailsWindow detailsWindow = new(Grönsaken.recipeId);
-                detailsWindow.Show();
-                Close();
+                    // send to Repo
+                    new IngridentRepository(context).updateIngridient(Grönsaken);
+                    context.SaveChanges();
+
+                    // Goes back to previous window with the current Recipe
+                    DetailsWindow detailsWindow = new(Grönsaken.recipeId);
+                    detailsWindow.Show();
+                    // close current window
+                    Close();
+                }
             }
 
 
+        }
+
+        private void btnExitToDetailsWindow_Click(object sender, RoutedEventArgs e)
+        {
+            DetailsWindow detailsWindow = new(Grönsaken.recipeId);
+            detailsWindow.Show();
+            Close();
         }
     }
 }

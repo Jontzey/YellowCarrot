@@ -89,6 +89,14 @@
             Grid.Row="5"
             Grid.Column="6"
             Height="40" Click="btnDelete_Click" />
+        <ComboBox 
+            Name="cbxTagSelection"
+            IsEditable="True"
+            IsReadOnly="True"
+            Text="   -- Select Tag --" 
+            Height="25"
+            Grid.Column="7"/>
+
         <Grid.Background>
             <ImageBrush ImageSource="Backgrounds\Kitchen.jpg"/>
         </Grid.Background>

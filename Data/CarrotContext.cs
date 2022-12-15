@@ -27,7 +27,7 @@ namespace YellowCarrot.Data
         
        
         public virtual DbSet<Recipe> recipes { get; set; }
-        public virtual DbSet<Ingridient> ingridients { get; set; }
+        public virtual DbSet<Ingridient> Ingridients { get; set; }
 
         public virtual DbSet<Tags> tags { get; set; }  
 

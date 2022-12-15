@@ -47,6 +47,9 @@ namespace YellowCarrot
             // sets the button to be disabled from beginning
             btnRemoveIngridient.IsEnabled = false;
             btnChangeIngridient.IsEnabled = false;
+            btnAddTag.IsEnabled = false;
+            btnSaveIngridient.IsEnabled = false;
+            btnSeeTags.IsEnabled = false;
 
 
             using (CarrotContext context= new CarrotContext())
@@ -60,7 +63,7 @@ namespace YellowCarrot
 
             }
             
-        }
+        } //Check
 
 
 
@@ -133,9 +136,7 @@ namespace YellowCarrot
             // if something in listview is selected more than nothing do this
             if(lvlIngridiens.SelectedIndex > -1 )
             {
-                // if something is selected make the button available
-                btnRemoveIngridient.IsEnabled = true;
-                btnChangeIngridient.IsEnabled = true;
+               
             }
             // if nothing is selected do this
             else if (lvlIngridiens.SelectedIndex == -1)
@@ -173,6 +174,15 @@ namespace YellowCarrot
 
 
 
+        private void btnUnlock_Click(object sender, RoutedEventArgs e)
+        {
+            btnRemoveIngridient.IsEnabled = true;
+            btnChangeIngridient.IsEnabled = true;
+            btnAddTag.IsEnabled= true;
+            btnSaveIngridient.IsEnabled = true;
+            btnSeeTags.IsEnabled = true;
+            btnUnlock.IsEnabled = false;
+        }
 
 
         /////////////////////////////////METHODS////////////////////////////////////////////////////////
@@ -214,13 +224,22 @@ namespace YellowCarrot
 
         private void btnChangeIngridient_Click(object sender, RoutedEventArgs e)
         {
+            if(lvlIngridiens.SelectedItem == null)
+            {
+                MessageBox.Show("You forgot to choose what ingridient from list!");
+            }
+            else
+            {
 
-            ListViewItem SelectedItem = lvlIngridiens.SelectedItem as ListViewItem;
-            Ingridient ingridient = SelectedItem.Tag as Ingridient;
+                ListViewItem SelectedItem = lvlIngridiens.SelectedItem as ListViewItem;
+                Ingridient ingridient = SelectedItem.Tag as Ingridient;
+
             
-            ChangeIngridientWindow changeIngridientWindow = new(ingridient);
-            changeIngridientWindow.Show();
-            Close();
+                ChangeIngridientWindow changeIngridientWindow = new(ingridient);
+                changeIngridientWindow.Show();
+                Close();
+            }
+
            
         }
 
@@ -230,5 +249,16 @@ namespace YellowCarrot
             changeTagsWindow.Show();
 
         }
+
+        private void btnInfo_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show
+                ("Here you can add Ingrident to recipe and make changes and remove if you want\r \r" +
+                "NOTE!\r" +
+                "In Quantity section you can write text as well!\r " +
+                "this is so you as User can put in as well the measure of the quantity\r" +
+                "its not a must to add quantity, you can later add it if you want by pressing change button");
+        }
+
     }
 }

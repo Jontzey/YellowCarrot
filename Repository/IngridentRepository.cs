@@ -20,16 +20,16 @@ namespace YellowCarrot.Repository
         }
         public List<Ingridient> GetIngridients()
         {
-            return _context.ingridients.ToList();
+            return _context.Ingridients.ToList();
         }
         public List<Ingridient> GetIngridient(int recipeId)
         {
-            return _context.ingridients.Where(x => x.recipeId == recipeId).ToList();
+            return _context.Ingridients.Where(x => x.recipeId == recipeId).ToList();
 
         }
         public void AddIngrident(Ingridient addingridient)
         {
-            _context.ingridients.Add(addingridient);
+            _context.Ingridients.Add(addingridient);
         }
         public void RemoveIngridient(Ingridient DeleteIngridient)
         {
@@ -37,7 +37,7 @@ namespace YellowCarrot.Repository
         }
         public void updateIngridient(Ingridient UpdateIngridient)
         {
-            _context.ingridients.Update(UpdateIngridient);
+            _context.Ingridients.Update(UpdateIngridient);
         }
     }
 }

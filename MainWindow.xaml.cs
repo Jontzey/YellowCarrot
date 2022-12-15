@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using YellowCarrot.Data;
 using YellowCarrot.Model;
+using YellowCarrot.Repository;
 
 namespace YellowCarrot
 {
@@ -184,5 +185,18 @@ namespace YellowCarrot
 
             }
         }
+
+        //private void ComboBoxTagList()
+        //{
+        //    using (CarrotContext context = new CarrotContext())
+        //    {
+        //        Recipe recipe = new();
+
+        //        new TagRepo(context).Gettags(recipe).ToList();
+
+                
+
+        //    }
+        //}
     }
 }
