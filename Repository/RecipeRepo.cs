@@ -8,7 +8,7 @@ using YellowCarrot.Model;
 
 namespace YellowCarrot.Repository
 {
-    internal class RecipeRepo
+    public class RecipeRepo
     {
         private readonly CarrotContext _context;
 
@@ -17,20 +17,23 @@ namespace YellowCarrot.Repository
             this._context = context;
         }
 
-
-        public void GetIngridient(Recipe recipe)
+        public List<Recipe> GetAllRecipes()
+        {
+            return _context.recipes.ToList();
+        }
+        public void GetRecipe(Recipe recipe)
         {
             _context.recipes.Add(recipe);
         }
-        public void AddIngrident(Recipe recipe)
+        public void AddRecipe(Recipe recipe)
         {
             _context.recipes.Add(recipe);
         }
-        public void RemoveIngridient(Recipe recipe)
+        public void RemoveRecipe(Recipe recipe)
         {
             _context.recipes.Remove(recipe);
         }
-        private void updateIngridient(Recipe recipe)
+        public void updateRecipe(Recipe recipe)
         {
             _context.recipes.Update(recipe);
         }

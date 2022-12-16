@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using YellowCarrot.Data;
 using YellowCarrot.Model;
+using YellowCarrot.Repository;
 
 namespace YellowCarrot
 {
@@ -35,16 +36,14 @@ namespace YellowCarrot
             using (CarrotContext context= new CarrotContext())
             {
 
-                Recipe recipe = context.recipes.Where(x => x.RecipeId == Recipe.RecipeId).FirstOrDefault();
-
                 if (txbChangeRecipeName.Text.Length < 3)
                 {
                     MessageBox.Show("At least the recipe name must contain 3 letters");
                 }
                 else
                 {
-                    recipe.RecipeName = txbChangeRecipeName.Text;
-                    context.recipes.Update(recipe);
+                    Recipe.RecipeName = txbChangeRecipeName.Text;
+                    new RecipeRepo(context).updateRecipe(Recipe);
                     context.SaveChanges();
                     MessageBox.Show("New Recipe name has been changed!");
                     MainWindow mainWindow = new MainWindow();

@@ -72,6 +72,7 @@ namespace YellowCarrot
         // GOES BACK TO MAINWINDOW
         private void btnExitToMainWindow_Click(object sender, RoutedEventArgs e)
         {
+            // Opens mainwindow and closes current window
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
             Close();
@@ -109,7 +110,7 @@ namespace YellowCarrot
                 else
                 {
 
-                    // TEST KOD FOR REPO
+                    // using repo class and its method and creating new ingrident object in the constructor and givin it data
                     new IngridentRepository(context).AddIngrident(new Ingridient()
                     {
                         Name = txbIngridientName.Text,
@@ -161,7 +162,7 @@ namespace YellowCarrot
             using (CarrotContext context = new CarrotContext())
             {
                 
-
+                // send to repo.cs file, see that file for further understanding
                 new IngridentRepository(context).RemoveIngridient(ingridient);
                 context.SaveChanges();
 

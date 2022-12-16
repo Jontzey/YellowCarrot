@@ -24,41 +24,30 @@ namespace YellowCarrot
     /// </summary>
     public partial class MainWindow : Window
     {
+        ///////// THE WINDOW ////////////////
         public MainWindow()
         {
             InitializeComponent();
-
+            // all buttons is disabled until a current event happens
             btnSelect.IsEnabled = false;
             btnDelete.IsEnabled = false;
             btnChange.IsEnabled = false;
 
-
-            using (CarrotContext context = new CarrotContext())
-            {
-                List <Recipe> recipes = context.recipes.ToList();
-
-                foreach(Recipe recipe in recipes)
-                {
-                    ListViewItem item = new ListViewItem();
-
-                    item.Tag= recipe;
-                    item.Content = recipe.RecipeName;
-                    lvlRecipeList.Items.Add(item);
-                    lvlRecipeList.SelectedItem = btnSelect;
-                }
-                
-            }
+            // we can use the update Ui method to minimize the code instead of writing it twice
+            UpdateUiList();
         }
 
 
-        //////////////////////// EVENTS /////////////////////////////
-        /////////////////////////////////////////////////////////////
+        
+        /////////////////////// EVENTS IN WPF ////////////////////////////////////
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            // create new object
             Recipe recipe = new Recipe();
+            // using database class connection
             using (CarrotContext context= new CarrotContext())
             {
-
+                // if statement to show what happens if the textbox is null or is less than three characters
                 if(txbRecipeName.Text.Length == 0)
                 {
                     MessageBox.Show("You must have letters in a name for it to exist :) ");
@@ -69,71 +58,76 @@ namespace YellowCarrot
                 }
                 else
                 {
+                    // store the input from textbox to created object
                     recipe.RecipeName = txbRecipeName.Text;
-
-                    context.recipes.Add(recipe);
+                    new RecipeRepo(context).AddRecipe(recipe);
+                    // save changes to database
                     context.SaveChanges();
-
+                    // print out a message with current recipe name that was added
                     MessageBox.Show($"{recipe.RecipeName} was now added to the list");
+                    // clear the textbox field
                     txbRecipeName.Clear();
-                    
+                    // refreshes the listview
                     UpdateUiList();
-                    //MainWindow mainWindow = new MainWindow();
-                    //mainWindow.Show();
-                    //Close();
+                   
                 }
             }
         }
-        /////////////////////// EVENTS IN WPF ////////////////////////////////////
         private void btnSelect_Click(object sender, RoutedEventArgs e)
         {
 
             using (CarrotContext context = new CarrotContext())
             {
-
+                    // store the selected item in item
                     ListViewItem? item = lvlRecipeList.SelectedItem as ListViewItem;
+                    // the item that is selected is a recipe
                     Recipe reciperecipe = item.Tag as Recipe;
  
 
                     btnSelect.IsEnabled = true;
+                    // opens a new window with current recipe 
                     DetailsWindow detailsWindow = new(reciperecipe.RecipeId);
+                    // opens the window
                     detailsWindow.Show();
                  
 
                 
             }
+                    // close current window
                     Close();
         }
-
         private void btnInfo_Click(object sender, RoutedEventArgs e)
         {
+            // simpel info button to give out information about the app
             MessageBox.Show("                                            Welcome to info\r\r " +
                 "When added a recipe you can now see the recipe in the list!\r " +
                 "To add ingridients or tags choose from the list and then press the details button\r\r\r Details and Delete button is disabled until user selects a Recipe from the list!");
         }
-
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
+            // the selected item in listview 
             ListViewItem selectedItem = lvlRecipeList.SelectedItem as ListViewItem;
-
+            // the selected item is a recipe
             Recipe recipe = selectedItem.Tag as Recipe;
 
+            // Using the connection to datbase by using Carrotcontext class
             using (CarrotContext context = new CarrotContext())
             {
-
-                recipe = context.recipes.Where(x => x == recipe).FirstOrDefault();
-
-                context.recipes.Remove(recipe);
+                // send the selected recipe item to the method in repo class
+                new RecipeRepo(context).RemoveRecipe(recipe);
+                
+                // save changes to database
                 context.SaveChanges();
 
             }
+            // update the database
                 UpdateUiList();
         }
-
-
         private void lvlRecipeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // event for list view if something is chosen or not
 
+            // if something is more selected than null "do this"
             if(lvlRecipeList.SelectedIndex > -1)
             {
                 btnSelect.IsEnabled = true;
@@ -141,6 +135,7 @@ namespace YellowCarrot
                 btnChange.IsEnabled= true;
                 
             }
+            // if something is not selected do this
             else if (lvlRecipeList.SelectedIndex == -1)
             {
                 btnSelect.IsEnabled = false;
@@ -148,37 +143,41 @@ namespace YellowCarrot
                 btnChange.IsEnabled= false;
             }
         }
-
         private void btnChange_Click(object sender, RoutedEventArgs e)
         {
+            // The selected item in listview has a tag send it to another window for further use
             ListViewItem selectedItem = lvlRecipeList.SelectedItem as ListViewItem;
-
+            // the selected item is a recipe
             Recipe recipe = selectedItem.Tag as Recipe;
-
+            // Open new window and send the recipe with it
             ChangeRecipeNameWindow changeRecipeNameWindow = new(recipe);
+            // Open the window
             changeRecipeNameWindow.Show();
+            // close current window
             Close();
 
 
         }
 
-
         ////////////////////////// Methods //////////////////////////////
 
         private void UpdateUiList()
         {
+            // clears the items in listview
                     lvlRecipeList.Items.Clear();
-
+            // fills the listview again with recipe items from database
             using (CarrotContext context = new CarrotContext())
             {
-                List<Recipe> recipes = context.recipes.ToList();
+                // save the data from database into AllRecipes then we use it for further use
+               var AllRecipes = new RecipeRepo(context).GetAllRecipes();
 
-                foreach (Recipe recipe in recipes)
+                // foreach item in the List give a tag and then print out to listview
+                foreach (var allRecipe in AllRecipes)
                 {
                     ListViewItem item = new ListViewItem();
 
-                    item.Tag = recipe;
-                    item.Content = recipe.RecipeName;
+                    item.Tag = allRecipe;
+                    item.Content = allRecipe.RecipeName;
                     lvlRecipeList.Items.Add(item);
                     lvlRecipeList.SelectedItem = btnSelect;
                 }
@@ -186,17 +185,12 @@ namespace YellowCarrot
             }
         }
 
-        //private void ComboBoxTagList()
-        //{
-        //    using (CarrotContext context = new CarrotContext())
-        //    {
-        //        Recipe recipe = new();
 
-        //        new TagRepo(context).Gettags(recipe).ToList();
 
-                
 
-        //    }
-        //}
+
+
+
+        
     }
 }
