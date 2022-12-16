@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,7 @@ namespace YellowCarrot
             btnDelete.IsEnabled = false;
             btnChange.IsEnabled = false;
 
+            ShowAllTag();
             // we can use the update Ui method to minimize the code instead of writing it twice
             UpdateUiList();
         }
@@ -48,7 +50,7 @@ namespace YellowCarrot
             using (CarrotContext context= new CarrotContext())
             {
                 // if statement to show what happens if the textbox is null or is less than three characters
-                if(txbRecipeName.Text.Length == 0)
+                if (txbRecipeName.Text.Length == 0)
                 {
                     MessageBox.Show("You must have letters in a name for it to exist :) ");
                 }
@@ -56,11 +58,24 @@ namespace YellowCarrot
                 {
                     MessageBox.Show("The rule here is at least the name must have three letters! ;)");
                 }
+                else if (cbxTag.SelectedIndex < 0)
+                {
+                    MessageBox.Show("Give tag first before saving");
+                }
                 else
                 {
+
                     // store the input from textbox to created object
                     recipe.RecipeName = txbRecipeName.Text;
                     new RecipeRepo(context).AddRecipe(recipe);
+                    // from the combobox give it a tag and what type it is
+                    ComboBoxItem selectedItem = cbxTag.SelectedItem as ComboBoxItem;
+                    Tags SelectedTag = selectedItem.Tag as Tags;
+                    // give it the same id as the selected tag
+                    Tags tagdb = context.tags.FirstOrDefault(t => t.TagId == SelectedTag.TagId);
+
+                    // give the recipe tag id the same id
+                    recipe.Tags = tagdb;
                     // save changes to database
                     context.SaveChanges();
                     // print out a message with current recipe name that was added
@@ -86,7 +101,7 @@ namespace YellowCarrot
 
                     btnSelect.IsEnabled = true;
                     // opens a new window with current recipe 
-                    DetailsWindow detailsWindow = new(reciperecipe.RecipeId);
+                    DetailsWindow detailsWindow = new(reciperecipe);
                     // opens the window
                     detailsWindow.Show();
                  
@@ -113,11 +128,22 @@ namespace YellowCarrot
             // Using the connection to datbase by using Carrotcontext class
             using (CarrotContext context = new CarrotContext())
             {
-                // send the selected recipe item to the method in repo class
-                new RecipeRepo(context).RemoveRecipe(recipe);
+                //messagebox with yes and no option
+                if (MessageBox.Show("you sure u wanna delete recipe?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                {
+                    //do no stuff
+                }
+                else
+                {
+                    // send the selected recipe item to the method in repo class
+                    new RecipeRepo(context).RemoveRecipe(recipe);
                 
-                // save changes to database
-                context.SaveChanges();
+                    // save changes to database
+                    context.SaveChanges();
+                    
+                }
+
+
 
             }
             // update the database
@@ -187,9 +213,23 @@ namespace YellowCarrot
 
 
 
+        private void ShowAllTag()
+        {
+            using (CarrotContext context = new CarrotContext())
+            {
+                // save all tags in alltags which is a list, get all tags from database
+                var allTags = new TagRepo(context).GetTags();
 
-
-
+                // foreach thing in the list, give it a tag and what content to print later add to combo box
+                foreach (var tag in allTags)
+                {
+                    ComboBoxItem item = new();
+                    item.Tag = tag;
+                    item.Content = tag.TagName;
+                    cbxTag.Items.Add(item);
+                }
+            }
+        }
 
         
     }

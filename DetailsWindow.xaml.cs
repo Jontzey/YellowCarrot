@@ -33,30 +33,32 @@ namespace YellowCarrot
 
 
         //field variables
-        private Recipe recipes = new();
+        private Recipe recipes = new Recipe();
         private int theID = new();
-        private Ingridient oof = new();
-        public DetailsWindow(int recipeId)
+        
+        public DetailsWindow(Recipe recipeId)
         {
             InitializeComponent();
 
-            showIngridient(recipeId);
+            showIngridient(recipeId.RecipeId);
             // sets the field variable to what we sent from mainwindow to this window(details window)
-            this.theID = recipeId;
+            this.theID = recipeId.RecipeId;
+            recipes = recipeId;
 
             // sets the button to be disabled from beginning
             btnRemoveIngridient.IsEnabled = false;
             btnChangeIngridient.IsEnabled = false;
-            btnAddTag.IsEnabled = false;
+            
             btnSaveIngridient.IsEnabled = false;
             btnSeeTags.IsEnabled = false;
 
+            
 
             using (CarrotContext context= new CarrotContext())
             {
                     // the field variable is the same as the one we sent from mainwindow
                     // gets the correct recipe from database, checks the current id with the id in database
-                    recipes = context.recipes.Where(x => x.RecipeId == recipeId).FirstOrDefault();
+                    recipes = context.recipes.Where(x => x.RecipeId == recipeId.RecipeId).FirstOrDefault();
 
                     //textbox text same as the recipe name
                     txtRecipeName.Text = this.recipes.RecipeName;
@@ -75,26 +77,11 @@ namespace YellowCarrot
             // Opens mainwindow and closes current window
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
+            //closes current window
             Close();
         }
 
-        // ADD BUTTON TO ADD A TAG TO RECIPES
-        private void btnAddTag_Click(object sender, RoutedEventArgs e)
-        {
-            using (CarrotContext context= new CarrotContext())
-            {
-                Tags tag = new();
-
-                tag.Recipe = context.recipes.Where(x => x.RecipeId == theID).FirstOrDefault();
-                tag.TagName = txbTag.Text;
-
-                context.tags.Add(tag);
-                context.SaveChanges();
-
-
-
-            }
-        }
+        
 
         // save button for each ingridient
         private void btnSaveIngridient_Click(object sender, RoutedEventArgs e)
@@ -102,7 +89,7 @@ namespace YellowCarrot
         {
             using (CarrotContext context = new CarrotContext())
             {
-                
+                // if textbox is the same as no charactes == null
                 if(txbIngridientName.Text.Length == 0)
                 {
                     MessageBox.Show("Ingridient must have a name! even if its one letter!");
@@ -177,9 +164,10 @@ namespace YellowCarrot
 
         private void btnUnlock_Click(object sender, RoutedEventArgs e)
         {
+            // Button to unlock all buttons and disable the unlock button
             btnRemoveIngridient.IsEnabled = true;
             btnChangeIngridient.IsEnabled = true;
-            btnAddTag.IsEnabled= true;
+            
             btnSaveIngridient.IsEnabled = true;
             btnSeeTags.IsEnabled = true;
             btnUnlock.IsEnabled = false;
@@ -197,9 +185,10 @@ namespace YellowCarrot
 
             using (CarrotContext context = new CarrotContext())
             {
-
+                // shows the current recipes ingridients, the code saves all ingridients from database with the same recipe id in the var I which is a list
                 var I = new IngridentRepository(context).GetIngridient(recipeId);
 
+                // forach thing in the list
                 foreach(Ingridient currentRecipe in I)
                 {
                     ListViewItem item = new();
@@ -225,18 +214,19 @@ namespace YellowCarrot
 
         private void btnChangeIngridient_Click(object sender, RoutedEventArgs e)
         {
+            // if nothing in listview is selected when pressing the button
             if(lvlIngridiens.SelectedItem == null)
             {
                 MessageBox.Show("You forgot to choose what ingridient from list!");
             }
             else
             {
-
+                // give the ingridient a tag and then send it to another window
                 ListViewItem SelectedItem = lvlIngridiens.SelectedItem as ListViewItem;
                 Ingridient ingridient = SelectedItem.Tag as Ingridient;
 
             
-                ChangeIngridientWindow changeIngridientWindow = new(ingridient);
+                ChangeIngridientWindow changeIngridientWindow = new(ingridient,recipes);
                 changeIngridientWindow.Show();
                 Close();
             }
@@ -246,13 +236,17 @@ namespace YellowCarrot
 
         private void btnSeeTags_Click(object sender, RoutedEventArgs e)
         {
-            ChangeTagsWindow changeTagsWindow = new(theID);
+            //Opens the see tags window
+            ChangeTagsWindow changeTagsWindow = new(recipes);
             changeTagsWindow.Show();
+            //close current window
+            Close();
 
         }
 
         private void btnInfo_Click(object sender, RoutedEventArgs e)
         {
+            // simpel message
             MessageBox.Show
                 ("Here you can add Ingrident to recipe and make changes and remove if you want\r \r" +
                 "NOTE!\r" +
@@ -260,6 +254,8 @@ namespace YellowCarrot
                 "this is so you as User can put in as well the measure of the quantity\r" +
                 "its not a must to add quantity, you can later add it if you want by pressing change button");
         }
+
+        
 
     }
 }

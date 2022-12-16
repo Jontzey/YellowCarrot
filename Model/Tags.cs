@@ -19,10 +19,8 @@ namespace YellowCarrot.Model
         public string TagName { get; set; } = null!;
         
         // navigation property
-        public int recipeId { get; set; }
-
         
-        public Recipe Recipe { get; set; } = null!;
+        public List<Recipe>? Recipes { get; set; }
 
 
 

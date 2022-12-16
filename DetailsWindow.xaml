@@ -84,33 +84,14 @@
             Content="save ingridient"
             FontSize="13"
             Height="35" Click="btnSaveIngridient_Click"/>
-        <Label
-            Content="Tags"
-            Grid.Column="3"
-            Grid.Row="0"
-            FontSize="20"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Bottom"
-            />
-        <TextBox
-            x:Name="txbTag"
-            Background="Beige"
-            Grid.Row="1"
-            Grid.Column="3"
-            Height="30"
-            TextWrapping="Wrap"/>
-        <Button
-            x:Name="btnAddTag"
-            Grid.Row="2"
-            Grid.Column="3"
-            Content="Add Tag"
-            FontSize="13"
-            Height="35" Click="btnAddTag_Click"/>
+      
+        
+        
         <Button
             x:Name="btnSeeTags"
-            Grid.Row="3"
-            Grid.Column="3"
-            Content="See Tags"
+            Grid.Row="6"
+            Grid.Column="2"
+            Content="See Recipe Tags"
             FontSize="13"
             Height="35" Click="btnSeeTags_Click"/>
         <Button

@@ -11,8 +11,8 @@ using YellowCarrot.Data;
 namespace YellowCarrot.Migrations
 {
     [DbContext(typeof(CarrotContext))]
-    [Migration("20221214064939_LetsStart")]
-    partial class LetsStart
+    [Migration("20221216193632_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,7 +46,7 @@ namespace YellowCarrot.Migrations
 
                     b.HasIndex("recipeId");
 
-                    b.ToTable("ingridients");
+                    b.ToTable("Ingridients");
 
                     b.HasData(
                         new
@@ -154,7 +154,12 @@ namespace YellowCarrot.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
                     b.HasKey("RecipeId");
+
+                    b.HasIndex("TagsId");
 
                     b.ToTable("recipes");
 
@@ -162,12 +167,14 @@ namespace YellowCarrot.Migrations
                         new
                         {
                             RecipeId = 1,
-                            RecipeName = "Pannkaka"
+                            RecipeName = "Pannkaka",
+                            TagsId = 2
                         },
                         new
                         {
                             RecipeId = 2,
-                            RecipeName = "Kladkaka"
+                            RecipeName = "Kladkaka",
+                            TagsId = 1
                         });
                 });
 
@@ -183,14 +190,21 @@ namespace YellowCarrot.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("recipeId")
-                        .HasColumnType("int");
-
                     b.HasKey("TagId");
 
-                    b.HasIndex("recipeId");
-
                     b.ToTable("tags");
+
+                    b.HasData(
+                        new
+                        {
+                            TagId = 1,
+                            TagName = "baking"
+                        },
+                        new
+                        {
+                            TagId = 2,
+                            TagName = "Cooking"
+                        });
                 });
 
             modelBuilder.Entity("YellowCarrot.Model.Ingridient", b =>
@@ -204,22 +218,25 @@ namespace YellowCarrot.Migrations
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("YellowCarrot.Model.Tags", b =>
+            modelBuilder.Entity("YellowCarrot.Model.Recipe", b =>
                 {
-                    b.HasOne("YellowCarrot.Model.Recipe", "Recipe")
-                        .WithMany("Tags")
-                        .HasForeignKey("recipeId")
+                    b.HasOne("YellowCarrot.Model.Tags", "Tags")
+                        .WithMany("Recipes")
+                        .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Recipe");
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("YellowCarrot.Model.Recipe", b =>
                 {
                     b.Navigation("Ingridients");
+                });
 
-                    b.Navigation("Tags");
+            modelBuilder.Entity("YellowCarrot.Model.Tags", b =>
+                {
+                    b.Navigation("Recipes");
                 });
 #pragma warning restore 612, 618
         }

@@ -45,11 +45,14 @@ namespace YellowCarrot.Data
             {
                 RecipeId = 1,
                 RecipeName = "Pannkaka",
+                TagsId = 2,
+                
             },
             new Recipe()
             {
                 RecipeId = 2,
-                RecipeName = "Kladkaka"
+                RecipeName = "Kladkaka",
+                TagsId = 1,
             });
 
             modelBuilder.Entity<Ingridient>().HasData(
@@ -146,6 +149,19 @@ namespace YellowCarrot.Data
                 Name = "Salt",
                 Quantity = "1 krm",
                 recipeId = 2,
+            });
+
+            modelBuilder.Entity<Tags>().HasData(new Tags()
+            {
+                TagId = 1,
+                TagName = "baking",
+
+            }, new Tags()
+            {
+                TagId = 2,
+                TagName = "Cooking",
+                
+
             });
 
 

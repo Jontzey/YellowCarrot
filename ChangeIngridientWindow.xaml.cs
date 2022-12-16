@@ -22,14 +22,16 @@ namespace YellowCarrot
     /// </summary>
     public partial class ChangeIngridientWindow : Window
     {
-        // Field variable
+        // Field variables
         private Ingridient Grönsaken;
+        private Recipe recipe;
         
-        public ChangeIngridientWindow(Ingridient ingridient)
+        public ChangeIngridientWindow(Ingridient ingridient,Recipe theRecipe)
         {
             InitializeComponent();
-            
+            // filed variables same as the one we fetched from previous window
             this.Grönsaken = ingridient;
+            this.recipe = theRecipe;
             
         }
 
@@ -55,7 +57,7 @@ namespace YellowCarrot
                     context.SaveChanges();
 
                     // Goes back to previous window with the current Recipe
-                    DetailsWindow detailsWindow = new(Grönsaken.recipeId);
+                    DetailsWindow detailsWindow = new(recipe);
                     detailsWindow.Show();
                     // close current window
                     Close();
@@ -67,8 +69,10 @@ namespace YellowCarrot
 
         private void btnExitToDetailsWindow_Click(object sender, RoutedEventArgs e)
         {
-            DetailsWindow detailsWindow = new(Grönsaken.recipeId);
+            // opens details window
+            DetailsWindow detailsWindow = new(recipe);
             detailsWindow.Show();
+            // close current window
             Close();
         }
     }

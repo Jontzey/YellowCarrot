@@ -7,26 +7,46 @@
 namespace YellowCarrot.Migrations
 {
     /// <inheritdoc />
-    public partial class LetsStart : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "tags",
+                columns: table => new
+                {
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TagName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tags", x => x.TagId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "recipes",
                 columns: table => new
                 {
                     RecipeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RecipeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    RecipeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TagsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_recipes", x => x.RecipeId);
+                    table.ForeignKey(
+                        name: "FK_recipes_tags_TagsId",
+                        column: x => x.TagsId,
+                        principalTable: "tags",
+                        principalColumn: "TagId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ingridients",
+                name: "Ingridients",
                 columns: table => new
                 {
                     IngridientId = table.Column<int>(type: "int", nullable: false)
@@ -37,46 +57,35 @@ namespace YellowCarrot.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ingridients", x => x.IngridientId);
+                    table.PrimaryKey("PK_Ingridients", x => x.IngridientId);
                     table.ForeignKey(
-                        name: "FK_ingridients_recipes_recipeId",
+                        name: "FK_Ingridients_recipes_recipeId",
                         column: x => x.recipeId,
                         principalTable: "recipes",
                         principalColumn: "RecipeId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "tags",
-                columns: table => new
+            migrationBuilder.InsertData(
+                table: "tags",
+                columns: new[] { "TagId", "TagName" },
+                values: new object[,]
                 {
-                    TagId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TagName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    recipeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_tags", x => x.TagId);
-                    table.ForeignKey(
-                        name: "FK_tags_recipes_recipeId",
-                        column: x => x.recipeId,
-                        principalTable: "recipes",
-                        principalColumn: "RecipeId",
-                        onDelete: ReferentialAction.Cascade);
+                    { 1, "baking" },
+                    { 2, "Cooking" }
                 });
 
             migrationBuilder.InsertData(
                 table: "recipes",
-                columns: new[] { "RecipeId", "RecipeName" },
+                columns: new[] { "RecipeId", "RecipeName", "TagsId" },
                 values: new object[,]
                 {
-                    { 1, "Pannkaka" },
-                    { 2, "Kladkaka" }
+                    { 1, "Pannkaka", 2 },
+                    { 2, "Kladkaka", 1 }
                 });
 
             migrationBuilder.InsertData(
-                table: "ingridients",
+                table: "Ingridients",
                 columns: new[] { "IngridientId", "Name", "Quantity", "recipeId" },
                 values: new object[,]
                 {
@@ -96,27 +105,27 @@ namespace YellowCarrot.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ingridients_recipeId",
-                table: "ingridients",
+                name: "IX_Ingridients_recipeId",
+                table: "Ingridients",
                 column: "recipeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tags_recipeId",
-                table: "tags",
-                column: "recipeId");
+                name: "IX_recipes_TagsId",
+                table: "recipes",
+                column: "TagsId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ingridients");
-
-            migrationBuilder.DropTable(
-                name: "tags");
+                name: "Ingridients");
 
             migrationBuilder.DropTable(
                 name: "recipes");
+
+            migrationBuilder.DropTable(
+                name: "tags");
         }
     }
 }

@@ -27,20 +27,35 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+
         <ListView
-            x:Name="lvlAllTags"
+            x:Name="lvlCurrentTags"
+            Grid.Row="1"
+            Grid.Column="2"
+            Grid.ColumnSpan="4"
+            Grid.RowSpan="2"
+            Background="Beige"
+            />
+        <ComboBox
+            x:Name="cbxAllTags"
             Grid.ColumnSpan="4"
             Grid.Column="2"
-            Grid.RowSpan="4"
+            Grid.Row="3"
+            IsEditable="True"
+            IsReadOnly="True"
+            Text="   -- Select Tag --"
+            VerticalContentAlignment="Center"
+            HorizontalContentAlignment="Center"
+            
             Background="Beige"/>
 
         <Button
-            x:Name="btnRemoveTag"
+            x:Name="btnChangeTag"
             Grid.Row="4"
             Grid.Column="3"
             Grid.ColumnSpan="2"
             Height="30"
-            Content="Remove Tag" Click="btnRemoveTag_Click"/>
+            Content="Change tag" Click="btnChangeTag_Click" />
         
         <Button
             x:Name="btnExit"

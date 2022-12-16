@@ -15,10 +15,10 @@ namespace YellowCarrot.Repository
         {
             this._context = context;
         }
-        //public List<Tags> GetTags()
-        //{
-        //    return _context.Tags.ToList();
-        //}
+        public List<Tags> GetTags()
+        {
+            return _context.tags.ToList();
+        }
         //public List<Tags> Gettags(Recipe recipeId)
         //{
         //    Tags tags = new Tags();
@@ -28,6 +28,15 @@ namespace YellowCarrot.Repository
         //public void AddTag(Tags theTag)
         //{
         //    _context.Tags.Add(theTag);
+        //}
+        //public Tags AddTagToRecipe(Tags theTag)
+        //{
+        //    return
+        //}
+
+        //public List<Tags> currentTag()
+        //{
+        //    return
         //}
         //public void RemoveTag(Tags deleteTag)
         //{
