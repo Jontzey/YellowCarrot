@@ -63,6 +63,10 @@ namespace YellowCarrot
                 context.recipes.Update(currentRecipe);
                 // save changes
                 context.SaveChanges();
+
+                DetailsWindow detailsWindow = new(currentRecipe);
+                detailsWindow.Show();
+                Close();
                 
             }
         }
